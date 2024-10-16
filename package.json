@@ -76,35 +76,52 @@ The EPROTO error typically results from a mismatch in the TLS version, an unsupp
 
 
 
-Error  [JwtParseError: Error while resolving signing key for kid "fF4Y61fIMSkoef3xAhgfHs4MPBEKL3iogmQ6ztkf4Oo"] {
-  userMessage: 'Error while resolving signing key for kid "fF4Y61fIMSkoef3xAhgfHs4MPBEKL3iogmQ6ztkf4Oo"',
-  jwtString: 'eyJraWQiOiJmRjRZNjFmSU1Ta29lZjN4QWhnZkhzNE1QQkVLTDNpb2dtUTZ6dGtmNE9vIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULjl2RWJBWDhnVzZKWWRKMkwwQWstTDExaG1Da0VoS2lGUEx4RW9FX3g0N2sub2FyMmhxcWdidmRuZlk0bE8yOTciLCJpc3MiOiJodHRwczovL2ltcGwuaWRwLmlkbS5jbXMuZ292L29hdXRoMi9hdXM0aXdyOWltWkxzNFViQTI5NyIsImF1ZCI6Im5vdml0YXMiLCJpYXQiOjE3Mjg5MjQ5MjEsImV4cCI6MTcyODkyNjcyMSwiY2lkIjoiMG9hNGl3cmZlbU9xNndYN0kyOTciLCJ1aWQiOiIwMHU4bGVldTNwT2JieXA1TTI5NyIsInNjcCI6WyJvZmZsaW5lX2FjY2VzcyIsIm9wZW5pZCIsImVtYWlsIiwicHJvZmlsZSJdLCJhdXRoX3RpbWUiOjE3Mjg5MjQ5MjAsInN1YiI6ImhzYW50YTIxIiwiY21zUm9sZXMiOiJuc2ktZW5kdXNlciJ9.NjknuqasOprzH9LsHDClwappja-PSt74bfqR-WlhkWo4Vn_hh8MgdRSDl6ODlsFunEZQn8vSfTG2IpdBsuw_XJ9Xb_ydVro7mzwlPtJCCBwkJhu_VQHRbIpWiM8QBTFTMlySO7I2uFXiMxu-xTJlQ5rvjJoklhD-d81k4D-LVdX-yQJ5xvjmRbZ3rILaQyaK4yWtFmpidxDqYGuq_IgzB4NiwMDcMkYdLitHIvKP11Mja60xZr6-YRioko8FqzaxnCaJxY2tbCh431XzXNa0g0uc65N3tPSdTx9BA8aayuUJ7IJC7SOzCoPwoexLZ3SZAsU2tlKMkH97mmuZpB66mA',
-  parsedHeader: JwtHeader {
-    typ: undefined,
-    alg: 'RS256',
-    kid: 'fF4Y61fIMSkoef3xAhgfHs4MPBEKL3iogmQ6ztkf4Oo'
-  },
-  parsedBody: JwtBody {
-    ver: 1,
-    jti: 'AT.9vEbAX8gW6JYdJ2L0Ak-L11hmCkEhKiFPLxEoE_x47k.oar2hqqgbvdnfY4lO297',
-    iss: 'https://impl.idp.idm.cms.gov/oauth2/aus4iwr9imZLs4UbA297',
-    aud: 'novitas',
-    iat: 1728924921,
-    exp: 1728926721,
-    cid: '0oa4iwrfemOq6wX7I297',
-    uid: '00u8leeu3pObbyp5M297',
-    scp: [ 'offline_access', 'openid', 'email', 'profile' ],
-    auth_time: 1728924920,
-    sub: 'hsanta21',
-    cmsRoles: 'nsi-enduser'
-  },
-  innerError: Error: write EPROTO C008033FF67F0000:error:1C8000E9:Provider routines:kdf_tls1_prf_derive:ems not enabled:providers/implementations/kdfs/tls1_prf.c:200:
-  
-      at WriteWrap.onWriteComplete [as oncomplete] (node:internal/stream_base_commons:95:16)
-      at WriteWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
-    errno: -71,
-    code: 'EPROTO',
-    syscall: 'write'
-  }
-}
+Okta JWT Token Verification
 
+The JwtParseError error indicates that the problem might also stem from the inability to retrieve or verify the signing key (kid) from Okta. This could be due to networking issues, certificate problems, or invalid kid settings.
+
+Solution:
+
+	•	Ensure that your OpenShift environment has access to Okta’s public key infrastructure (PKI) to verify the JWT token’s signature. You can fetch the Okta JSON Web Key Set (JWKS) endpoint to resolve the kid.
+	•	Verify that your network can reach Okta’s JWKS endpoint without any TLS handshake issues.
+
+Example of fetching JWKS:
+
+const axios = require('axios');
+
+axios.get('https://your-okta-domain/oauth2/default/v1/keys')
+  .then(response => {
+    console.log(response.data);
+  })
+  .catch(error => {
+    console.error('Error fetching keys:', error);
+  });
+
+
+
+
+
+Certificate or Firewall Issues
+
+If there are proxy servers, firewalls, or custom certificates in your OpenShift environment, these might be interfering with the TLS handshake.
+
+Solution:
+
+	•	If you’re using self-signed certificates or custom certificate authorities (CAs), ensure that the necessary certificates are trusted by the Node.js environment. You may need to add the certificates to your trusted CA store.
+	•	Test whether disabling certificate verification temporarily helps identify the issue:
+
+
+
+NODE_TLS_REJECT_UNAUTHORIZED=0 node your_app.js
+
+
+
+
+ TLS Settings in OpenShift
+
+OpenShift may have policies or restrictions that enforce certain versions of TLS or specific ciphers. You can review and configure these settings as needed.
+
+Check OpenShift’s default TLS version and ciphers:
+
+	•	Ensure that OpenShift allows outgoing connections to Okta over the required TLS version (TLS 1.2 or higher).
+	•	If your OpenShift environment enforces older or weaker ciphers, you might need to update the TLS policies for your routes or pods.
