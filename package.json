@@ -50,3 +50,55 @@ export default MyTable;
 	•	XLSX Library: This library is used to generate and manipulate the Excel file.
 	•	file-saver: This is used to trigger the download of the file.
 npm install xlsx file-saver
+import React from "react";
+import MaterialTable from "material-table";
+import { saveAs } from "file-saver";
+import * as XLSX from "xlsx";
+
+const MyTable = () => {
+  return (
+    <MaterialTable
+      title="My Exportable Table"
+      columns={[
+        { title: "Name", field: "name" },
+        { title: "Surname", field: "surname" },
+        { title: "Birth Year", field: "birthYear", type: "numeric" },
+        { title: "Birth City", field: "birthCity", lookup: { 34: "İstanbul", 63: "Şanlıurfa" } }
+      ]}
+      data={[
+        { name: "Mehmet", surname: "Baran", birthYear: 1987, birthCity: 63 },
+        { name: "Zerya Betül", surname: "Baran", birthYear: 2017, birthCity: 34 }
+      ]}
+      options={{
+        exportButton: true
+      }}
+      onExport={(columns, data) => {
+        // Prepare an empty array to store rows, including two empty rows
+        const rows = [
+          ["", ""], // First empty row
+          ["", ""], // Second empty row
+        ];
+
+        // Add actual data rows
+        data.forEach((rowData) => {
+          const row = [];
+          columns.forEach((column) => {
+            row.push(rowData[column.field] || "");
+          });
+          rows.push(row);
+        });
+
+        // Create a new workbook and worksheet
+        const ws = XLSX.utils.aoa_to_sheet(rows);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+        // Generate the Excel file and trigger download
+        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        saveAs(new Blob([excelBuffer], { type: "application/octet-stream" }), "table_export.xlsx");
+      }}
+    />
+  );
+};
+
+export default MyTable;
