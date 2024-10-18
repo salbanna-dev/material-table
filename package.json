@@ -1,75 +1,52 @@
-The shift from Node.js 14 to Node.js 20 introduces several changes, especially regarding stricter security policies, updated dependencies (like OpenSSL), and compatibility with older protocols or ciphers. These differences are likely why your application, which worked fine with Node.js 14, now faces issues with Node.js 20. Here are the main reasons:
+import MaterialTable from "material-table";
+import { saveAs } from 'file-saver';
+import XLSX from 'xlsx';
 
-1. OpenSSL Upgrade in Node.js 20
+const MyTable = () => {
+  return (
+    <MaterialTable
+      title="My Exportable Table"
+      columns={[
+        { title: 'Name', field: 'name' },
+        { title: 'Surname', field: 'surname' },
+        { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
+        { title: 'Birth City', field: 'birthCity', lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' } }
+      ]}
+      data={[
+        { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
+        { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34 },
+      ]}
+      options={{
+        exportButton: true,
+      }}
+      onExport={(columns, data) => {
+        const ws = XLSX.utils.json_to_sheet([
+          {}, {},  // Two empty rows
+          ...data.map(rowData => {
+            const result = {};
+            columns.forEach(col => {
+              result[col.field] = rowData[col.field];
+            });
+            return result;
+          })
+        ]);
 
-	•	Node.js 20 uses OpenSSL 3.0, while Node.js 14 uses OpenSSL 1.1.1. The upgrade to OpenSSL 3.0 introduces stricter security measures and may drop support for older cryptographic algorithms and weak TLS versions that were previously accepted in Node.js 14.
-	•	Some older or deprecated TLS protocols and cipher suites that might have worked fine in Node.js 14 are no longer allowed by default in Node.js 20.
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
 
-Solution:
+        const buf = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        saveAs(new Blob([buf], { type: "application/octet-stream" }), "table_export.xlsx");
+      }}
+    />
+  );
+};
 
-	•	Force your Node.js 20 application to use compatible, modern TLS versions by specifying the minVersion: 'TLSv1.2' (as discussed previously).
-	•	Ensure Okta’s services are running with a modern TLS version (like TLS 1.2 or TLS 1.3).
-
-2. Stricter TLS Defaults
-
-	•	Node.js 20 enforces stricter defaults for TLS connections. This means that connections that may have worked in Node.js 14 using older or less secure configurations will fail unless explicitly configured to use secure protocols and ciphers.
-
-Differences in defaults:
-
-	•	Node.js 14: More lenient and allows certain older or insecure TLS connections.
-	•	Node.js 20: Stricter defaults, rejecting weak or deprecated protocols, leading to EPROTO errors if Okta’s TLS settings are not compatible with the newer requirements.
-
-Solution:
-
-	•	Review the TLS policies in your OpenShift environment and update any outdated cipher suites or protocols.
-
-3. JWT Verification and Algorithm Support
-
-	•	Node.js 20 may have different behavior around JWT signature verification. If Okta’s token signing algorithm (RS256) or key management (such as resolving the kid field) has compatibility issues with the new OpenSSL library or cryptographic module, you may encounter JWT parsing errors.
-
-Solution:
-
-	•	Ensure that your Okta environment is properly configured to use supported and secure algorithms, and that the JWT tokens it generates comply with stricter validation rules in Node.js 20.
-
-4. Custom CA Certificates
-
-	•	Node.js 20 might have a more restrictive handling of certificates or CA chains than Node.js 14. If your OpenShift environment uses custom or self-signed certificates, Node.js 20 may reject connections due to stricter validation of certificate chains.
-
-Solution:
-
-	•	If you’re using custom CA certificates, make sure they are correctly configured in your Node.js 20 environment using the NODE_EXTRA_CA_CERTS environment variable or by adding the custom CA bundle to the trusted store.
-
-5. TLS 1.0/1.1 Deprecated
-
-	•	Node.js 20 disables TLS 1.0 and 1.1 by default. If the Okta service is still configured to use these older protocols, the connection will fail.
-
-Solution:
-
-	•	Confirm that Okta supports TLS 1.2 or 1.3. If possible, update Okta’s configuration to enforce the use of these more secure protocols. You can also ensure that your Node.js application forces the use of TLS 1.2 or higher (this was optional in Node.js 14 but now more strictly enforced).
-
-6. Changes in Error Handling
-
-	•	Node.js 20 may handle certain network errors, like TLS handshake failures, differently from Node.js 14. This could result in different error codes or behaviors in response to the same issue.
-
-Solution:
-
-	•	Check Node.js 20’s release notes to identify changes in error handling and update your error-handling logic if necessary.
-
-Summary of Differences
+export default MyTable;
 
 
-OpenSSL Version	1.1.1	3.0
-TLS Default Protocol	Allows TLS 1.0, 1.1, 1.2	TLS 1.2, 1.3 only (1.0 and 1.1 deprecated)
-Cipher Suite Enforcement	Less strict, accepts weaker ciphers	Stricter, requires modern ciphers
 
-JWT Verification	More lenient	Stricter key management and signature verification
-CA Certificate Handling	More lenient	Stricter handling of certificate chains
-Error Handling	Less detailed, more forgiving	More detailed, stricter error handling
-
-
-Next Steps
-
-	•	Check Okta’s TLS version and algorithms: Make sure Okta supports TLS 1.2 or higher and the RS256 algorithm for JWT tokens.
-	•	Update your Node.js app: Specify the minVersion of TLS as TLSv1.2 or higher in your HTTPS requests.
-	•	Review network policies and certificates: Ensure your OpenShift environment’s certificates are properly configured, and check if any firewall or proxy settings interfere with Okta communication.
-	•	Test with a proxy or without TLS verification (temporarily): This can help isolate if the issue is network-related or TLS/certificate-based.
+	onExport: This is where we customize the export logic.
+	•	Two empty rows: The [{},{}, ...] array structure adds two empty objects, which Excel treats as two empty rows.
+	•	XLSX Library: This library is used to generate and manipulate the Excel file.
+	•	file-saver: This is used to trigger the download of the file.
+npm install xlsx file-saver
