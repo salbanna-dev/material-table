@@ -16,3 +16,30 @@
     "start": "lerna run start --parallel --stream",
     "clear:cache": "npm cache clear --force",
     "clear:nodemodules": "npx lerna clean --yes"
+
+
+
+
+
+{
+  "scripts": {
+    "clean": "npm run clean --workspaces --if-present",
+    "build:external": "npm run build --workspace=@poe-gateway-ui/external",
+    "build:admin": "npm run build --workspace=@poe-gateway-ui/admin",
+    "build:common": "npm run build --workspace=@poe-gateway-ui/common",
+    "build:services": "npm run build --workspace=poe-gateway-services",
+    "external": "npm run start:dev --workspace=@poe-gateway-ui/external",
+    "admin": "npm run start:dev --workspace=@poe-gateway-ui/admin",
+    "services": "npm run start:dev --workspace=poe-gateway-services",
+    "link:all": "npm link --workspace --force",
+    "lint": "npm run lint --workspaces --since HEAD",
+    "lint:common": "npm run lint --workspace=@poe-gateway-ui/common",
+    "lint:external": "npm run lint --workspace=@poe-gateway-ui/external",
+    "lint:admin": "npm run lint --workspace=@poe-gateway-ui/admin",
+    "lint:services": "npm run lint --workspace=poe-gateway-services",
+    "diff": "git diff",
+    "start": "npm run start --workspaces",
+    "clear:cache": "npm cache clean --force",
+    "clear:nodemodules": "rimraf **/node_modules"
+  }
+}
