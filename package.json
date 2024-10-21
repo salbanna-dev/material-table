@@ -1,64 +1,18 @@
-import React, { useRef } from "react";
-import MaterialTable from "material-table";
-import { saveAs } from "file-saver";
-import * as XLSX from "xlsx";
-
-const MyTable = () => {
-  const tableRef = useRef();
-
-  return (
-    <MaterialTable
-      tableRef={tableRef} // Attach reference to access all table data
-      title="My Exportable Table"
-      columns={[
-        { title: "Name", field: "name" },
-        { title: "Surname", field: "surname" },
-        { title: "Birth Year", field: "birthYear", type: "numeric" },
-        { title: "Birth City", field: "birthCity", lookup: { 34: "İstanbul", 63: "Şanlıurfa" } }
-      ]}
-      data={[
-        { name: "Mehmet", surname: "Baran", birthYear: 1987, birthCity: 63 },
-        { name: "Zerya Betül", surname: "Baran", birthYear: 2017, birthCity: 34 }
-      ]}
-      actions={[
-        {
-          icon: 'save',
-          tooltip: 'Export to Excel',
-          isFreeAction: true, // Makes the button global rather than tied to a row
-          onClick: () => {
-            const allData = tableRef.current.dataManager.data; // Access all data in the table
-
-            // Prepare the data for the sheet with two empty rows
-            const wsData = [
-              [], // First empty row
-              [], // Second empty row
-              ['Name', 'Surname', 'Birth Year', 'Birth City'], // Column headers
-            ];
-
-            // Add the data rows
-            allData.forEach(rowData => {
-              const row = [rowData.name, rowData.surname, rowData.birthYear, rowData.birthCity];
-              wsData.push(row);
-            });
-
-            // Create a new workbook and worksheet
-            const ws = XLSX.utils.aoa_to_sheet(wsData);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-
-            // Write the workbook and trigger download
-            const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-            const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-            saveAs(blob, "table_export.xlsx");
-          }
-        }
-      ]}
-      options={{
-        actionsColumnIndex: -1, // Display the action button in the last column
-        exportButton: false // Disable the built-in export button
-      }}
-    />
-  );
-};
-
-export default MyTable;
+ "clean": "lerna run clean --parallel --stream",
+    "build:external": "lerna run build --stream --scope=@poe-gateway-ui/external",
+    "build:admin": "lerna run build --stream --scope=@poe-gateway-ui/admin",
+    "build:common": "lerna run build --stream --scope=@poe-gateway-u/common",
+    "build:services": "lerna run build --stream --scope=poe-gateway-services",
+    "external": "lerna exec --scope @poe-gateway-ui/external -- npm run start:dev",
+    "admin": "lerna exec --scope @poe-gateway-ui/admin -- npm run start:dev",
+    "services": "lerna exec --scope poe-gateway-services -- npm run start:dev",
+    "link:all": "lerna link --force-local",
+    "lint": "lerna run lint --since HEAD --parallel --stream",
+    "lint:common": "lerna run lint --stream --scope @poe-gateway-ui/common",
+    "lint:external": "lerna run lint --stream --scope @poe-gateway-ui/external",
+    "lint:admin": "lerna run lint --stream --scope @poe-gateway-ui/admin",
+    "lint:services": "lerna run lint --stream --scope poe-gateway-services",
+    "diff": "lerna diff",
+    "start": "lerna run start --parallel --stream",
+    "clear:cache": "npm cache clear --force",
+    "clear:nodemodules": "npx lerna clean --yes"
