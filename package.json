@@ -1,45 +1,20 @@
- "clean": "lerna run clean --parallel --stream",
-    "build:external": "lerna run build --stream --scope=@poe-gateway-ui/external",
-    "build:admin": "lerna run build --stream --scope=@poe-gateway-ui/admin",
-    "build:common": "lerna run build --stream --scope=@poe-gateway-u/common",
-    "build:services": "lerna run build --stream --scope=poe-gateway-services",
-    "external": "lerna exec --scope @poe-gateway-ui/external -- npm run start:dev",
-    "admin": "lerna exec --scope @poe-gateway-ui/admin -- npm run start:dev",
-    "services": "lerna exec --scope poe-gateway-services -- npm run start:dev",
-    "link:all": "lerna link --force-local",
-    "lint": "lerna run lint --since HEAD --parallel --stream",
-    "lint:common": "lerna run lint --stream --scope @poe-gateway-ui/common",
-    "lint:external": "lerna run lint --stream --scope @poe-gateway-ui/external",
-    "lint:admin": "lerna run lint --stream --scope @poe-gateway-ui/admin",
-    "lint:services": "lerna run lint --stream --scope poe-gateway-services",
-    "diff": "lerna diff",
-    "start": "lerna run start --parallel --stream",
-    "clear:cache": "npm cache clear --force",
-    "clear:nodemodules": "npx lerna clean --yes"
+# npm audit report
 
+swagger-ui-dist  <=4.1.2
+Severity: moderate
+Spoofing attack in swagger-ui-dist - https://github.com/advisories/GHSA-6c9x-mj3g-h47x
+Server side request forgery in SwaggerUI - https://github.com/advisories/GHSA-qrmm-w75w-3wpx
+fix available via `npm audit fix`
+packages/services/node_modules/swagger-ui-dist
+  swagger-ui-express  4.0.0 - 4.1.6
+  Depends on vulnerable versions of swagger-ui-dist
+  packages/services/node_modules/swagger-ui-express
 
+xlsx  *
+Severity: high
+Prototype Pollution in sheetJS - https://github.com/advisories/GHSA-4r6h-8v6p-xvw6
+SheetJS Regular Expression Denial of Service (ReDoS) - https://github.com/advisories/GHSA-5pgg-2g8v-p4x9
+No fix available
+node_modules/xlsx
 
-
-
-{
-  "scripts": {
-    "clean": "npm run clean --workspaces --if-present",
-    "build:external": "npm run build --workspace=@poe-gateway-ui/external",
-    "build:admin": "npm run build --workspace=@poe-gateway-ui/admin",
-    "build:common": "npm run build --workspace=@poe-gateway-ui/common",
-    "build:services": "npm run build --workspace=poe-gateway-services",
-    "external": "npm run start:dev --workspace=@poe-gateway-ui/external",
-    "admin": "npm run start:dev --workspace=@poe-gateway-ui/admin",
-    "services": "npm run start:dev --workspace=poe-gateway-services",
-    "link:all": "npm link --workspace --force",
-    "lint": "npm run lint --workspaces --since HEAD",
-    "lint:common": "npm run lint --workspace=@poe-gateway-ui/common",
-    "lint:external": "npm run lint --workspace=@poe-gateway-ui/external",
-    "lint:admin": "npm run lint --workspace=@poe-gateway-ui/admin",
-    "lint:services": "npm run lint --workspace=poe-gateway-services",
-    "diff": "git diff",
-    "start": "npm run start --workspaces",
-    "clear:cache": "npm cache clean --force",
-    "clear:nodemodules": "rimraf **/node_modules"
-  }
-}
+3 vulnerabilities (2 moderate, 1 high)
