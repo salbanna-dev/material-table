@@ -35,3 +35,11 @@
     ]
   }
 }
+
+
+
+{
+  "lint-staged": {
+    "*.js": "eslint --fix"
+  }
+}
