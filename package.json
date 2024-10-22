@@ -1,20 +1,21 @@
-# npm audit report
-
-swagger-ui-dist  <=4.1.2
-Severity: moderate
-Spoofing attack in swagger-ui-dist - https://github.com/advisories/GHSA-6c9x-mj3g-h47x
-Server side request forgery in SwaggerUI - https://github.com/advisories/GHSA-qrmm-w75w-3wpx
-fix available via `npm audit fix`
-packages/services/node_modules/swagger-ui-dist
-  swagger-ui-express  4.0.0 - 4.1.6
-  Depends on vulnerable versions of swagger-ui-dist
-  packages/services/node_modules/swagger-ui-express
-
-xlsx  *
-Severity: high
-Prototype Pollution in sheetJS - https://github.com/advisories/GHSA-4r6h-8v6p-xvw6
-SheetJS Regular Expression Denial of Service (ReDoS) - https://github.com/advisories/GHSA-5pgg-2g8v-p4x9
-No fix available
-node_modules/xlsx
-
-3 vulnerabilities (2 moderate, 1 high)
+   "admin": "lerna exec --scope @prior-auth-gateway/admin -- npm run start:dev",
+    "clean": "lerna run clean --parallel --stream",
+    "install:dev": "set NODE_ENV=development&& npm install",
+    "install:prod": "set NODE_ENV=production&& npm install -d",
+    "build:external": "lerna run build --stream --scope=@prior-auth-gateway/external",
+    "build:common": "lerna run build --stream --scope=@prior-auth-gateway/common",
+    "build:services": "lerna run build --stream --scope=@prior-auth-gateway/services",
+    "external": "lerna exec --scope @prior-auth-gateway/ui -- npm run start:dev",
+    "services": "lerna exec --scope @prior-auth-gateway/services -- npm run start:dev",
+    "reports": "lerna exec --scope @prior-auth-gateway/reports -- npm run start:dev",
+    "cron": "lerna exec --scope @prior-auth-gateway/services -- npm run start:cron",
+    "link:all": "lerna link --force-local",
+    "lint": "lerna run lint",
+    "lint:common": "lerna run lint --stream --scope @prior-auth-gateway/services/common",
+    "lint:external": "lerna run lint --stream --scope @prior-auth-gateway/ui",
+    "lint:services": "lerna run lint --stream --scope @prior-auth-gateway/services",
+    "start": "lerna run start --parallel --stream",
+    "clear:cache": "npm cache clear --force",
+    "clear:nodemodules": "npx lerna clean --yes",
+    "bootstrap": "lerna bootstrap",
+    "prepare": "husky install"
