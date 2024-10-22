@@ -1,21 +1,37 @@
-   "admin": "lerna exec --scope @prior-auth-gateway/admin -- npm run start:dev",
-    "clean": "lerna run clean --parallel --stream",
-    "install:dev": "set NODE_ENV=development&& npm install",
-    "install:prod": "set NODE_ENV=production&& npm install -d",
-    "build:external": "lerna run build --stream --scope=@prior-auth-gateway/external",
-    "build:common": "lerna run build --stream --scope=@prior-auth-gateway/common",
-    "build:services": "lerna run build --stream --scope=@prior-auth-gateway/services",
-    "external": "lerna exec --scope @prior-auth-gateway/ui -- npm run start:dev",
-    "services": "lerna exec --scope @prior-auth-gateway/services -- npm run start:dev",
-    "reports": "lerna exec --scope @prior-auth-gateway/reports -- npm run start:dev",
-    "cron": "lerna exec --scope @prior-auth-gateway/services -- npm run start:cron",
-    "link:all": "lerna link --force-local",
-    "lint": "lerna run lint",
-    "lint:common": "lerna run lint --stream --scope @prior-auth-gateway/services/common",
-    "lint:external": "lerna run lint --stream --scope @prior-auth-gateway/ui",
-    "lint:services": "lerna run lint --stream --scope @prior-auth-gateway/services",
-    "start": "lerna run start --parallel --stream",
-    "clear:cache": "npm cache clear --force",
-    "clear:nodemodules": "npx lerna clean --yes",
-    "bootstrap": "lerna bootstrap",
+{
+  "scripts": {
+    "admin": "npm run start:dev --workspace=@prior-auth-gateway/admin",
+    "clean": "npm run clean --workspaces",
+    "install:dev": "set NODE_ENV=development && npm install",
+    "install:prod": "set NODE_ENV=production && npm install -d",
+    "build:external": "npm run build --workspace=@prior-auth-gateway/external",
+    "build:common": "npm run build --workspace=@prior-auth-gateway/common",
+    "build:services": "npm run build --workspace=@prior-auth-gateway/services",
+    "external": "npm run start:dev --workspace=@prior-auth-gateway/ui",
+    "services": "npm run start:dev --workspace=@prior-auth-gateway/services",
+    "reports": "npm run start:dev --workspace=@prior-auth-gateway/reports",
+    "cron": "npm run start:cron --workspace=@prior-auth-gateway/services",
+    "link:all": "npm link --ignore-workspace-root-check",
+    "lint": "npm run lint --workspaces",
+    "lint:common": "npm run lint --workspace=@prior-auth-gateway/services/common",
+    "lint:external": "npm run lint --workspace=@prior-auth-gateway/ui",
+    "lint:services": "npm run lint --workspace=@prior-auth-gateway/services",
+    "start": "npm run start --workspaces --if-present",
+    "clear:cache": "npm cache clean --force",
+    "clear:nodemodules": "npx rimraf node_modules",
+    "bootstrap": "npm install",
     "prepare": "husky install"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/admin",
+      "packages/external",
+      "packages/common",
+      "packages/services",
+      "packages/reports"
+    ],
+    "nohoist": [
+      "**/@prior-auth-gateway/commonjs"
+    ]
+  }
+}
