@@ -1,26 +1,36 @@
-   "incidents": "lerna exec --scope @medicare/incidents -- npm start",
-    "lcd": "lerna exec --scope @medicare/lcd -- npm start",
-    "providerEnrollment": "lerna exec --scope @medicare/providerEnrollment -- npm start",
-    "programrelatedinquiry": "lerna exec --scope @medicare/programrelatedinquiry -- npm start",
-    "calculator": "lerna exec --scope @medicare/calculator -- npm start",
-    "poeag": "lerna exec --scope @medicare/POE-AG -- npm start",
-    "fcso": "lerna exec --scope @medicare/fcsoMedicaretools -- npm start",
-    "novitas": "lerna exec --scope @medicare/novitasMedicaretools -- npm start",
-    "link:all": "lerna link --force-local",
-    "lint": "lerna run lint --parallel --stream",
-    "clean": "lerna run clean --parallel --stream",
+{
+  "scripts": {
+    "incidents": "npm start -w @medicare/incidents",
+    "lcd": "npm start -w @medicare/lcd",
+    "providerEnrollment": "npm start -w @medicare/providerEnrollment",
+    "programrelatedinquiry": "npm start -w @medicare/programrelatedinquiry",
+    "calculator": "npm start -w @medicare/calculator",
+    "poeag": "npm start -w @medicare/POE-AG",
+    "fcso": "npm start -w @medicare/fcsoMedicaretools",
+    "novitas": "npm start -w @medicare/novitasMedicaretools",
+
+    "link:all": "npm link --workspaces",
+
+    "lint": "npm run lint --workspaces --parallel",
+    "clean": "npm run clean --workspaces --parallel",
+
     "clear:cache": "npm cache clear --force",
-    "clear:nodemodules": "npx lerna clean --yes",
-    "bootstrap": "lerna bootstrap --loglevel verbos",
-    "build-fcso:prod": "lerna exec --scope @medicare/fcsoMedicaretools -- npm run build:prod",
-    "build-fcso:dev": "lerna exec --scope @medicare/fcsoMedicaretools -- npm run build:dev",
-    "build-fcso:test": "lerna exec --scope @medicare/fcsoMedicaretools -- npm run build:test",
-    "build-fcso:impl": "lerna exec --scope @medicare/fcsoMedicaretools -- npm run build:impl",
-    "build-novitas:prod": "lerna exec --scope @medicare/novitasMedicaretools -- npm run build:prod",
-    "build-novitas:dev": "lerna exec --scope @medicare/novitasMedicaretools -- npm run build:dev",
-    "build-novitas:test": "lerna exec --scope @medicare/novitasMedicaretools -- npm run build:test",
-    "build-novitas:impl": "lerna exec --scope @medicare/novitasMedicaretools -- npm run build:impl",
-    "build:lcd": "lerna exec --scope @medicare/lcd -- npm run build",
-    "build:incidents": "lerna exec --scope @medicare/incidents -- npm run build",
-    "build:calculator": "lerna exec --scope @medicare/calculator -- npm run build",
-    "prepare": "husky"
+    "clear:nodemodules": "npx npm clean-install",
+
+    "build-fcso:prod": "npm run build:prod -w @medicare/fcsoMedicaretools",
+    "build-fcso:dev": "npm run build:dev -w @medicare/fcsoMedicaretools",
+    "build-fcso:test": "npm run build:test -w @medicare/fcsoMedicaretools",
+    "build-fcso:impl": "npm run build:impl -w @medicare/fcsoMedicaretools",
+
+    "build-novitas:prod": "npm run build:prod -w @medicare/novitasMedicaretools",
+    "build-novitas:dev": "npm run build:dev -w @medicare/novitasMedicaretools",
+    "build-novitas:test": "npm run build:test -w @medicare/novitasMedicaretools",
+    "build-novitas:impl": "npm run build:impl -w @medicare/novitasMedicaretools",
+
+    "build:lcd": "npm run build -w @medicare/lcd",
+    "build:incidents": "npm run build -w @medicare/incidents",
+    "build:calculator": "npm run build -w @medicare/calculator",
+
+    "prepare": "husky install"
+  }
+}
