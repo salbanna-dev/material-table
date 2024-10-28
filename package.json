@@ -1,19 +1,25 @@
-    "clean": "lerna run clean --parallel --stream",
-    "install:dev": "set NODE_ENV=development&& npm install",
-    "install:prod": "set NODE_ENV=production&& npm install -d",
-    "build:ui": "lerna run build --stream --scope=@gws/shared-ui-components",
-    "build:services": "lerna run build --stream --scope=@gws/shared-nodejs",
-    "publish:ui": "lerna run build --stream --scope=@gws/shared-ui-components",
-    "publish:services": "lerna run build --stream --scope=@gws/shared-nodejs",
-    "link:all": "lerna link --force-local",
-    "lint": "lerna run lint",
-    "lint:ui": "lerna run lint --stream --scope @gws/shared-ui-components",
-    "lint:services": "lerna run lint --stream --scope @gws/shared-nodejs",
-    "diff": "lerna diff",
-    "start": "lerna run start --parallel --stream",
-    "ui": "lerna exec --scope @gws/shared-ui-components -- npm run start",
+{
+  "scripts": {
+    "clean": "npm run clean --workspaces",
+    "install:dev": "NODE_ENV=development npm install",
+    "install:prod": "NODE_ENV=production npm install --omit=dev",
+    "build:ui": "npm run build --workspace=@gws/shared-ui-components",
+    "build:services": "npm run build --workspace=@gws/shared-nodejs",
+    "publish:ui": "npm run build --workspace=@gws/shared-ui-components",
+    "publish:services": "npm run build --workspace=@gws/shared-nodejs",
+    "link:all": "npm link --workspaces",
+    "lint": "npm run lint --workspaces",
+    "lint:ui": "npm run lint --workspace=@gws/shared-ui-components",
+    "lint:services": "npm run lint --workspace=@gws/shared-nodejs",
+    "diff": "git diff",
+    "start": "npm run start --workspaces",
+    "ui": "npm run start --workspace=@gws/shared-ui-components",
     "clear:cache": "npm cache clear --force",
-    "clear:nodemodules": "npx lerna clean --yes",
+    "clear:nodemodules": "rimraf node_modules && npm install",
     "postinstall": "node postinstall",
-    "bootstrap": "lerna bootstrap",
     "prepare": "husky install"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}
