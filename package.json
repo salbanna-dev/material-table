@@ -1,25 +1,19 @@
-{
-  "scripts": {
-    "clean": "npm run clean --workspaces",
-    "install:dev": "NODE_ENV=development npm install",
-    "install:prod": "NODE_ENV=production npm install --omit=dev",
-    "build:ui": "npm run build --workspace=@gws/shared-ui-components",
-    "build:services": "npm run build --workspace=@gws/shared-nodejs",
-    "publish:ui": "npm run build --workspace=@gws/shared-ui-components",
-    "publish:services": "npm run build --workspace=@gws/shared-nodejs",
-    "link:all": "npm link --workspaces",
-    "lint": "npm run lint --workspaces",
-    "lint:ui": "npm run lint --workspace=@gws/shared-ui-components",
-    "lint:services": "npm run lint --workspace=@gws/shared-nodejs",
-    "diff": "git diff",
-    "start": "npm run start --workspaces",
-    "ui": "npm run start --workspace=@gws/shared-ui-components",
-    "clear:cache": "npm cache clear --force",
-    "clear:nodemodules": "rimraf node_modules && npm install",
-    "postinstall": "node postinstall",
-    "prepare": "husky install"
-  },
-  "workspaces": [
-    "packages/*"
-  ]
-}
+1. IMPL (Implementation)
+
+	•	Purpose: Often used as an environment for integrating various components or features developed by different teams. Sometimes, “IMPL” can also refer to an initial deployment environment where implementations are tested before progressing to staging or production.
+	•	Usage: Developers deploy services to IMPL for early integration testing, ensuring that the application components interact as expected.
+	•	Characteristics: May include mock or dummy data and typically has configurations close to production but might lack the full-scale resources or complete data fidelity.
+
+2. STAGE (Staging)
+
+	•	Purpose: Staging is a pre-production environment that closely replicates the production setup. It serves as the final testing ground before deployment to production.
+	•	Usage: Used for end-to-end testing, user acceptance testing (UAT), and performance testing to ensure that code is stable and behaves as expected under realistic conditions.
+	•	Characteristics: Usually mirrors production as closely as possible in terms of data, configurations, and environment settings, making it ideal for identifying any last-minute issues.
+
+3. UNIT (Unit Testing)
+
+	•	Purpose: Unit testing is a lower-level testing environment focused on verifying individual components or functions of the code in isolation.
+	•	Usage: Developers write unit tests to validate that specific functions, methods, or components perform as expected without involving other systems or services.
+	•	Characteristics: In AWS, unit testing might not require actual cloud resources; instead, it often runs locally or in a CI/CD pipeline using test frameworks (e.g., Jest for JavaScript, JUnit for Java) and mock data. Unit tests are faster and focused on isolated parts of the application.
+
+Summary
