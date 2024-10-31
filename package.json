@@ -1,19 +1,5 @@
-1. IMPL (Implementation)
-
-	•	Purpose: Often used as an environment for integrating various components or features developed by different teams. Sometimes, “IMPL” can also refer to an initial deployment environment where implementations are tested before progressing to staging or production.
-	•	Usage: Developers deploy services to IMPL for early integration testing, ensuring that the application components interact as expected.
-	•	Characteristics: May include mock or dummy data and typically has configurations close to production but might lack the full-scale resources or complete data fidelity.
-
-2. STAGE (Staging)
-
-	•	Purpose: Staging is a pre-production environment that closely replicates the production setup. It serves as the final testing ground before deployment to production.
-	•	Usage: Used for end-to-end testing, user acceptance testing (UAT), and performance testing to ensure that code is stable and behaves as expected under realistic conditions.
-	•	Characteristics: Usually mirrors production as closely as possible in terms of data, configurations, and environment settings, making it ideal for identifying any last-minute issues.
-
-3. UNIT (Unit Testing)
-
-	•	Purpose: Unit testing is a lower-level testing environment focused on verifying individual components or functions of the code in isolation.
-	•	Usage: Developers write unit tests to validate that specific functions, methods, or components perform as expected without involving other systems or services.
-	•	Characteristics: In AWS, unit testing might not require actual cloud resources; instead, it often runs locally or in a CI/CD pipeline using test frameworks (e.g., Jest for JavaScript, JUnit for Java) and mock data. Unit tests are faster and focused on isolated parts of the application.
-
-Summary
+[webpack-cli] Failed to load '/prod/cm/pvc/jenkins/workspace/ptl_poe-gateway_upgrade_node_20/packages/external/webpack.config.js' config
+14:34:46  [webpack-cli] Error: Cannot find module 'ajv/dist/compile/codegen'
+14:34:46  Require stack:
+14:34:46  - /prod/cm/pvc/jenkins/workspace/ptl_poe-gateway_upgrade_node_20/node_modules/ajv-keywords/dist/definitions/typeof.js
+14:34:46  - /prod/cm/pvc/jenkins/workspace/ptl_poe-gateway_upgrade_node_20/node_modules/ajv-keywords/dist/keywords/typeof.js
